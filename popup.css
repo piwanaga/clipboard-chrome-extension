@@ -1,0 +1,32 @@
+main {
+    width: 550px;
+    display: flex;
+    flex-direction: column;
+}
+
+#add-form {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+#add-btn {
+    margin-left: auto;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+}
+
+.title {
+    font-weight: bold;
+    margin-right: 20px;
+}
+
+.copy-text {
+    margin-right: 20px;
+}
+
+.btn-group {
+    margin-left: auto;
+}
