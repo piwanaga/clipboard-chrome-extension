@@ -8,3 +8,8 @@ Tired of constantly having to click on your LinkedIn profile, Twitter, GitHub or
 * Add a new link with a title using the form at the top
 * Click "Copy" to copy your link text to your clipboard
 * Click "Delete" to remove the link from your list
+
+
+## Next priorities
+
+* Fix bug where list doesn't load on first extension icon click [(#3)](https://github.com/piwanaga/clipboard-chrome-extension/issues/3)
