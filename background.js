@@ -1,39 +1,43 @@
 // Listen for messages received from frontend (popup.js). If message received, check message text and perform action.
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.message === "get_all") {
-        // Get all records from database
-        let get_all_request = get_all_records()
+        
+        if (db) {
+            // Get all records from database
+            let get_all_request = get_all_records()
 
-        /*
-         * Respond with message and payload -- an array of objects representing our database records.
-         * Example payload:
-         * [{
-         *      title: "LinkedIn",
-         *      copyText: "www.linkedin.com/profile"
-         *  },
-         *  {
-         *      title: "Portfolio",
-         *      copyText: "www.portfolio.com"
-         *  }] 
-         */ 
-        get_all_request.then(res => {
-            chrome.runtime.sendMessage({
-                message: "get_all_success",
-                payload: res
+            // Respond with message and payload -- an array of objects representing our database records.
+            // Example payload:
+            //     [{
+            //         title: "LinkedIn",
+            //         copyText: "www.linkedin.com/profile"
+            //     },
+            //     {
+            //         title: "Portfolio",
+            //         copyText: "www.portfolio.com"
+            //     }] 
+            get_all_request.then(res => {
+                chrome.runtime.sendMessage({
+                    message: "get_all_success",
+                    payload: res
+                })
             })
-        })
+
+            // Return so that we do not send records a second time in create_database()
+            return
+        }
+        
     } else if (request.message === "insert") {
         // Insert record from payload into database 
         let insert_request = insert_record(request.payload)
 
-        /*
-         * Return message and an object representing the record that was inserted.
-         * Example payload:
-         * {
-         *  title: "Github",
-         *  copyText: "www.github.com/profile"     
-         * }
-         */
+        //   Respond with message and an object representing the record that was inserted.
+        //   Example payload:
+        //     {
+        //     title: "Github",
+        //     copyText: "www.github.com/profile"     
+        //     }
+         
         insert_request.then(res => {
             chrome.runtime.sendMessage({
                 message: "insert_success",
@@ -55,15 +59,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 })
 
 let db = null
+let storedLinks = []
 
 const create_database = () => {
     // Use self instead of window because background.js is a service worker and does not have access to DOM
     const request = self.indexedDB.open("ClipboardDB")
 
-    request.onerror = event => {
-        console.log("Error opening DB.")
-    }
-    
     // Gets executed whenever a new database in opened or if a different version of an existing database is opened. Does not get executed otherwise. This is also where the schema is defined.
     request.onupgradeneeded = (event) => {
         db = event.target.result
@@ -80,22 +81,39 @@ const create_database = () => {
 
     // Always runs unless there is an error when opening database
     request.onsuccess = (event) => {
+        // Set global db variable
         db = event.target.result
         console.log("DB Opened.")
+
+        // On successful db opening, get all records. This is helpful when service worker is inactive because when the extension UI is opened, if the db has not yet been opened then the request from "get_all" from frontend will fail. If that happens, once the db is open the following code will run and the frontend will still receive all records from the db.
+        
+        if (db) {
+            let get_all_request = get_all_records()
+            get_all_request.then(res => {
+                chrome.runtime.sendMessage({
+                    message: "get_all_success",
+                    payload: res
+                })
+            })
+        }
+    }
+
+    request.onerror = event => {
+        console.log("Error opening DB.")
     }
 }
 
 const delete_database = () => {
     const request = window.indexedDB.delete_database("ClipboardDB")
 
-    request.onerror = (event) => {
-        console.log("Error deleting DB.")
-    }
-
     request.onsuccess = (event) => {
         db = event.target.result
 
         console.log("DB Deleted.")
+    }
+
+    request.onerror = (event) => {
+        console.log("Error deleting DB.")
     }
 }
 
@@ -225,6 +243,15 @@ const delete_record = (title) => {
         })
     }
 }
-
+console.log("test return")
 create_database()
+
+
+
+
+
+
+
+
+
 
