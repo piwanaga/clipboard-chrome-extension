@@ -4,7 +4,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         if (request.payload) {
             request.payload.forEach(link => {
                 addEntry(link.title, link.copyText)
-            })
+            })   
         }
     } else if (request.message === "insert_success") {
         if (request.payload) {
@@ -16,6 +16,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         }
     } else if (request.message === "delete_success") {
         if (request.payload) {
+
             // Remove linkGroup from DOM
             recordToDelete.remove()
         }
