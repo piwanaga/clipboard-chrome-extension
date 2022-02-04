@@ -12,4 +12,4 @@ Tired of constantly having to click on your LinkedIn profile, Twitter, GitHub or
 
 ## Next priorities
 
-* Fix bug where list doesn't load on first extension icon click [(#3)](https://github.com/piwanaga/clipboard-chrome-extension/issues/3)
+* Force UI to stay open [(#8)](https://github.com/piwanaga/clipboard-chrome-extension/issues/8)
