@@ -51,18 +51,25 @@ addForm.addEventListener("submit", (evt) => {
 })
 
 // Copy text on click
-const addCopyEventListener = () => {
-    const copyBtns = document.getElementsByClassName("copy-btn");
-    
-    for (let btn of copyBtns) {
-        // Select text to be copied
-        let copyText = btn.parentElement.previousElementSibling.innerText
-        btn.addEventListener("click", () => {
-            // Copy text to clipboard
-            navigator.clipboard.writeText(copyText)
-        })
-    }
+const addCopyEventListener = (copyText) => {
+    copyText.addEventListener("click", () => {
+        navigator.clipboard.writeText(copyText.innerText)
+    })
 }
+
+// Copy text on click
+// const addCopyEventListener = () => {
+//     const copyBtns = document.getElementsByClassName("copy-btn");
+    
+//     for (let btn of copyBtns) {
+//         // Select text to be copied
+//         let copyText = btn.parentElement.previousElementSibling.innerText
+//         btn.addEventListener("click", () => {
+//             // Copy text to clipboard
+//             navigator.clipboard.writeText(copyText)
+//         })
+//     }
+// }
 
 // Global variable representing DOM element to be removed. The variable can be set when the delete button is clicked. Once confirmation is received that the record has been deleted from the database, the element can be removed from the DOM, from inside of the chrome.runtime.onMessage.addListener
 let recordToDelete
@@ -115,12 +122,12 @@ const addEntry = (titleText, textToCopy) => {
     inputGroup.appendChild(title)
     inputGroup.appendChild(copyText)
     btnGroup.appendChild(deleteBtn)
-    btnGroup.appendChild(copyBtn)
+    // btnGroup.appendChild(copyBtn)
     inputGroup.appendChild(btnGroup)
 
     main.appendChild(inputGroup)
 
-    addCopyEventListener()
+    addCopyEventListener(copyText)
     addDeleteEventListener()
 }
 
