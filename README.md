@@ -12,4 +12,5 @@ Tired of constantly having to click on your LinkedIn profile, Twitter, GitHub or
 
 ## Next priorities
 
+* Click text to copy [(#4)](https://github.com/piwanaga/clipboard-chrome-extension/issues/4)
 * Force UI to stay open [(#8)](https://github.com/piwanaga/clipboard-chrome-extension/issues/8)
