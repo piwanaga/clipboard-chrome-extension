@@ -50,26 +50,31 @@ addForm.addEventListener("submit", (evt) => {
     })
 })
 
-// Copy text on click
-const addCopyEventListener = (copyText) => {
-    copyText.addEventListener("click", () => {
-        navigator.clipboard.writeText(copyText.innerText)
-    })
-}
+// Global variable to store the node with the currently copied text. Used to remove confirmation when another link is clicked
+let confirmed
 
 // Copy text on click
-// const addCopyEventListener = () => {
-//     const copyBtns = document.getElementsByClassName("copy-btn");
+const addCopyEventListener = (inputGroup, copyText) => {
     
-//     for (let btn of copyBtns) {
-//         // Select text to be copied
-//         let copyText = btn.parentElement.previousElementSibling.innerText
-//         btn.addEventListener("click", () => {
-//             // Copy text to clipboard
-//             navigator.clipboard.writeText(copyText)
-//         })
-//     }
-// }
+    // Create confirmation text element
+    const confirmationText = document.createElement("p")
+    confirmationText.classList.add('confirmation-text')
+    confirmationText.innerText = "Copied!"
+    
+    inputGroup.addEventListener("click", () => {
+        // Remove confirmation text from previously copied link
+        if (confirmed) confirmed.remove()
+
+        // Copy text to clipboard
+        navigator.clipboard.writeText(copyText.innerText)
+
+        // Add confirmation text after copy text and before delete button
+        inputGroup.insertBefore(confirmationText, inputGroup.lastChild)
+
+        // Set confirmed to new node
+        confirmed = confirmationText
+    })
+}
 
 // Global variable representing DOM element to be removed. The variable can be set when the delete button is clicked. Once confirmation is received that the record has been deleted from the database, the element can be removed from the DOM, from inside of the chrome.runtime.onMessage.addListener
 let recordToDelete
@@ -81,10 +86,10 @@ const addDeleteEventListener = () => {
     for (let btn of deleteBtns) {
         btn.addEventListener("click", () => {
             // Set variable so that it can be removed inside of chrome.runtime.onMessage.addListener 
-            recordToDelete = btn.parentElement.parentElement
+            recordToDelete = btn.parentElement
 
             // Get title text
-            let titleText = btn.parentElement.previousElementSibling.previousElementSibling.innerText
+            let titleText = btn.parentElement.firstChild.innerText
 
             // Save title without ": " 
             title = titleText.slice(0, titleText.length - 1)
@@ -103,31 +108,24 @@ const addEntry = (titleText, textToCopy) => {
     const inputGroup = document.createElement("div")
     const title = document.createElement("p")
     const copyText = document.createElement("p")
-    const btnGroup = document.createElement("div")
     const deleteBtn = document.createElement("button")
-    const copyBtn = document.createElement("button")
 
     title.innerText = titleText + ": "
     copyText.innerText = textToCopy
     deleteBtn.innerText = "Delete"
-    copyBtn.innerText = "Copy"
 
     inputGroup.classList.add("input-group")
     title.classList.add("title")
     copyText.classList.add("copy-text")
-    btnGroup.classList.add("btn-group")
-    copyBtn.classList.add("copy-btn")
     deleteBtn.classList.add("delete-btn")
 
     inputGroup.appendChild(title)
     inputGroup.appendChild(copyText)
-    btnGroup.appendChild(deleteBtn)
-    // btnGroup.appendChild(copyBtn)
-    inputGroup.appendChild(btnGroup)
+    inputGroup.appendChild(deleteBtn)
 
     main.appendChild(inputGroup)
 
-    addCopyEventListener(copyText)
+    addCopyEventListener(inputGroup, copyText)
     addDeleteEventListener()
 }
 
