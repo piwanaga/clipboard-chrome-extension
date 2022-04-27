@@ -50,6 +50,16 @@ addForm.addEventListener("submit", (evt) => {
     })
 })
 
+// Mouseover event to display edit/delete buttons
+const addMouseoverEventListener = (inputGroup) => {
+    inputGroup.addEventListener("mouseenter", () => {
+        inputGroup.lastChild.classList.toggle("hidden")
+    })
+    inputGroup.addEventListener("mouseleave", () => {
+        inputGroup.lastChild.classList.toggle("hidden")
+    })
+}
+
 // Global variable to store the node with the currently copied text. Used to remove confirmation when another link is clicked
 let confirmed
 
@@ -59,7 +69,7 @@ const addCopyEventListener = (inputGroup, copyText) => {
     // Create confirmation text element
     const confirmationText = document.createElement("p")
     confirmationText.classList.add('confirmation-text')
-    confirmationText.innerText = "Copied!"
+    confirmationText.innerHTML = "&#10004;"
     
     inputGroup.addEventListener("click", () => {
         // Remove confirmation text from previously copied link
@@ -89,10 +99,10 @@ const addDeleteEventListener = () => {
             recordToDelete = btn.parentElement
 
             // Get title text
-            let titleText = btn.parentElement.firstChild.innerText
+            let title = btn.parentElement.firstChild.innerText
 
             // Save title without ": " 
-            title = titleText.slice(0, titleText.length - 1)
+            // title = titleText.slice(0, titleText.length - 1)
             
             // Send message to backened to trigger delete action and payload with title used to look up the record in the database
             chrome.runtime.sendMessage({
@@ -108,9 +118,9 @@ const addEntry = (titleText, textToCopy) => {
     const inputGroup = document.createElement("div")
     const title = document.createElement("p")
     const copyText = document.createElement("p")
-    const deleteBtn = document.createElement("button")
+    const deleteBtn = document.createElement("a")
 
-    title.innerText = titleText + ": "
+    title.innerText = titleText
     copyText.innerText = textToCopy
     deleteBtn.innerText = "Delete"
 
@@ -118,6 +128,7 @@ const addEntry = (titleText, textToCopy) => {
     title.classList.add("title")
     copyText.classList.add("copy-text")
     deleteBtn.classList.add("delete-btn")
+    deleteBtn.classList.add("hidden")
 
     inputGroup.appendChild(title)
     inputGroup.appendChild(copyText)
@@ -127,6 +138,7 @@ const addEntry = (titleText, textToCopy) => {
 
     addCopyEventListener(inputGroup, copyText)
     addDeleteEventListener()
+    addMouseoverEventListener(inputGroup)
 }
 
 
