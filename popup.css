@@ -1,33 +1,65 @@
 main {
     width: 550px;
+    padding: 0px 10px; 
     display: flex;
     flex-direction: column;
 }
 
 #add-form {
     display: flex;
-    margin-bottom: 20px;
+    padding: 20px 0px;
+    border-bottom: 1px lightgray solid;
+}
+
+#title-input {
+    border-radius: 5px;
+    border: 1px lightgray solid;
+}
+
+#copy-text-input {
+    margin-left: 10px;
+    border-radius: 5px;
+    border: 1px lightgray solid;
 }
 
 #add-btn {
     margin-left: auto;
+    border: none;
+    border-radius: 5px;
+    padding: 9px 30px;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    letter-spacing: 1px;
+    background: rgb(1, 1, 51);
+    color: white;
+}
+
+#add-btn:hover {
+    cursor: pointer;
 }
 
 .input-group {
     display: flex;
     align-items: center;
-    padding: 10px;
-    font-size: 1.1rem;
+    border-bottom: 1px lightgray solid;
+    padding: 5px;
+    font-size: 1.05rem;
     cursor: pointer;
 }
 
 .input-group:hover {
-    background-color: lightblue;
+    background-color: #F5F8FC;
+}
+
+input[type=text]:focus {
+    outline: 1px solid rgb(1, 1, 51);
 }
 
 .title {
-    font-weight: bold;
     margin-right: 15px;
+    width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .copy-text {
@@ -35,14 +67,27 @@ main {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    color: gray;
+    font-size: .9rem;
 }
 
 .delete-btn {
     margin-left: auto;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    color: rgb(201, 52, 52);
+}
+
+.delete-btn:hover {
+    text-decoration: underline;
+}
+
+.hidden {
+    display: none;
 }
 
 .confirmation-text {
-    font-size: .85rem;
-    color: rgb(30, 30, 194);
+    font-size: 1rem;
+    color: green;
     margin-left: 10px;
 }
